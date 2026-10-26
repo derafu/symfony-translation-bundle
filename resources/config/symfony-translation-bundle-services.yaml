@@ -1,0 +1,5 @@
+services:
+    Derafu\TranslationBundle\Translation\TranslatorFactory: ~
+
+    Derafu\Translation\Translation\TranslationResourceProvider:
+        tags: ['derafu_translation.resource_provider']
