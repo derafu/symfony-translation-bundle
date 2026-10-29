@@ -23,6 +23,9 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 final class TranslationResourcesPass implements CompilerPassInterface
 {
+    /**
+     * {@inheritDoc}
+     */
     public function process(ContainerBuilder $container): void
     {
         // FrameworkBundle removes this definition when translation is disabled.

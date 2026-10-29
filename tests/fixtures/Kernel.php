@@ -12,15 +12,12 @@ declare(strict_types=1);
 
 namespace Derafu\TestsTranslationBundle\Fixture;
 
-use Derafu\Translation\SimpleTranslationResourceProvider;
 use Derafu\TranslationBundle\TranslationBundle;
-use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * A real application with constructor-configured providers and native resources.
@@ -58,19 +55,20 @@ final class Kernel extends BaseKernel
             ], $this->framework));
             $container->loadFromExtension('derafu_translation', []);
             foreach ($this->directories as $index => $directory) {
-                $container->register('test.provider.' . $index, SimpleTranslationResourceProvider::class)
-                    ->setArguments([[$directory]])
-                    ->addTag('derafu_translation.resource_provider');
-            }
-            if ($this->withLogger) {
-                $container->register('test.logger', NullLogger::class);
-                $container->setAlias('logger', 'test.logger');
-            }
-            if (($this->framework['translator'] ?? true) !== false) {
-                $container->setAlias('test.translator', TranslatorInterface::class)->setPublic(true);
-                $container->setAlias('test.native_translator', 'translator.default')->setPublic(true);
+                $container->setParameter('fixture.provider.' . $index . '.directories', [$directory]);
             }
         });
+        // Each scenario contribution is declared in YAML. PHP supplies only
+        // its directory value and chooses the fixtures needed by the scenario.
+        foreach (array_keys($this->directories) as $index) {
+            $loader->load(__DIR__ . '/config/provider-' . $index . '.yaml');
+        }
+        if ($this->withLogger) {
+            $loader->load(__DIR__ . '/config/logger.yaml');
+        }
+        if (($this->framework['translator'] ?? true) !== false) {
+            $loader->load(__DIR__ . '/config/translator-access.yaml');
+        }
     }
 
     public function getProjectDir(): string

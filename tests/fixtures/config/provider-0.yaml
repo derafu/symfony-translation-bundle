@@ -1,0 +1,7 @@
+# One independently tagged application contribution in registration order.
+services:
+    Derafu\Translation\Contract\TranslationResourceProviderInterface $provider_0:
+        class: Derafu\Translation\SimpleTranslationResourceProvider
+        arguments:
+            $directories: '%fixture.provider.0.directories%'
+        tags: ['derafu_translation.resource_provider']

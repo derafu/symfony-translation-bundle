@@ -1,0 +1,9 @@
+# Public test access only; both translators are provided by FrameworkBundle.
+services:
+    test.translator:
+        alias: Symfony\Contracts\Translation\TranslatorInterface
+        public: true
+
+    test.native_translator:
+        alias: translator.default
+        public: true

@@ -1,5 +1,9 @@
+# TranslationBundle imports Translation's resources-only YAML using Composer's
+# installed package path, then loads this internal construction adapter.
+# The native translator definition, aliases and decorators belong to Symfony.
 services:
+    # Intentional concrete ID: an internal FrameworkBundle construction hook,
+    # not a public service contract. It merges provider files into the native
+    # constructor options while preserving application resource priority and
+    # cache metadata; it does not create a second translator service.
     Derafu\TranslationBundle\Translation\TranslatorFactory: ~
-
-    Derafu\Translation\Translation\TranslationResourceProvider:
-        tags: ['derafu_translation.resource_provider']

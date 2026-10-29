@@ -1,0 +1,7 @@
+services:
+    Psr\Log\LoggerInterface:
+        class: Psr\Log\NullLogger
+
+    # FrameworkBundle's logging translator uses this native application alias.
+    logger:
+        alias: Psr\Log\LoggerInterface
